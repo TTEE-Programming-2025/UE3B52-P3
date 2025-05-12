@@ -1,7 +1,8 @@
-//需使用Big5編碼格式開啟檔案，比避免中文變成亂碼
+// 需使用 Big5 編碼格式開啟檔案，避免中文亂碼
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 int main(void) {
     printf(
         "                _______\n"
@@ -25,66 +26,151 @@ int main(void) {
         "                 \\ | /\n"
         "                  \\|/     \n"
     );
-    printf("\n程式設計作業三\n");
-    printf("UE3B52\n");
-    printf("411102252\n");
-    printf("沈威宇\n");
-    printf("請輸入四位數密碼:");
-    int pw = 2025, input,i;       //密碼預設2025
-    scanf("%d", &input);
-    if (input != pw) {
-        printf("密碼輸入錯誤\n");
-        for(i=0;i<2;i++){
-            printf("請輸入四位數密碼:\n"); 
-            scanf("%d", &input);
-        }
-        printf("密碼輸入錯誤已達三次\n");
-        system("pause");
+    printf("\n程式設計作業三\nUE3B52\n411102252\n沈威宇\n");
+    const int pw = 2025;
+    int input, tries = 0;
+    while (tries < 3) {
+        printf("請輸入四位數密碼：");
+        if (scanf("%d", &input) == 1 && input == pw) break;
+        tries++;
+        printf("密碼錯誤，還有 %d 次機會！\n", 3 - tries);
+    }
+    if (tries == 3) {
+        printf("密碼錯誤已達三次，程式結束！\n");
         return 1;
     }
-    system("cls"); //清除螢幕
-    while (getchar() != '\n'); //清理緩衝區
-    while(1){
+    while (getchar() != '\n');
+    int seats[9][9] = {0};
+    int reserved = 0;
+    srand((unsigned)time(NULL));//使用#include <time.h>，每次都隨機
+    while (reserved < 10) {
+        int rr = rand() % 9;
+        int cc = rand() % 9;
+        if (seats[rr][cc] == 0) {
+            seats[rr][cc] = 1;
+            reserved++;
+        }
+    }
+    while (1) {
+        system("cls"); 
         printf("----------[Booking System]----------\n");
         printf("|  a. Available seats             |\n");
         printf("|  b. Arrange for you             |\n");
         printf("|  c. Choose by yourself          |\n");
         printf("|  d. Exit                        |\n");
         printf("-----------------------------------\n");
+        printf("請輸出 a/b/c/d 選項：");
+
         char in;
-        printf("請輸出a/b/c選項:");
-        scanf(" %c",&in);
-        system("cls"); //清除螢幕
-        int seats[9][9] = {0};     
-        int r = 0;
-        srand((unsigned)time(NULL)); //使用#include <time.h>，每次都隨機
-        while (r < 10) {
-            int b = rand() % 9;     
-            int c = rand() % 9;     
-            if (seats[r][c] == 0) {
-                seats[r][c] = 1;
-                r++;
-            }
-        }
-        switch (in) {
-            case 'a': 
-                printf("\\123456789\n");
-                for (int row = 8; row >= 0; row--) {
-                    printf("%d-", row + 1);
-                    for (int col = 0; col < 9; col++) {
-                        putchar(seats[row][col] ? '*' : '-');
-                    }
-                    putchar('\n');
+        scanf(" %c", &in);
+        if (in == 'a' || in == 'A') {
+            printf("\\123456789\n");
+            for (int row = 8; row >= 0; row--) {
+                printf("%d-", row + 1);
+                for (int col = 0; col < 9; col++) {
+                    putchar(seats[row][col] ? '*' : '-');
                 }
+                putchar('\n');
+            }
             printf("\n按任意鍵返回主選單...");
-            getchar(); getchar();   
-            system("cls");        
-            break;
-
-
-
+            getchar(); getchar();  
+        }
+        else if (in == 'b' || in == 'B') {
+            int need;
+            while (1) {
+                printf("請輸入要預訂的座位數 (1~4)：");
+                if (scanf("%d", &need) != 1) {
+                    while (getchar() != '\n');
+                    printf("輸入錯誤！請輸入數字。\n");
+                    continue;
+                }
+                if (need >= 1 && need <= 4) break;
+                printf("輸入錯誤！範圍必須在 1～4。\n");
+            }
+            while (getchar() != '\n');
+            int sug[9][9] = {0};
+            if (need <= 3) 
+                while (1) {
+                    int row   = rand() % 9;
+                    int start = rand() % (9 - need + 1);
+                    int ok = 1;
+                    for (int j = 0; j < need; j++)
+                        if (seats[row][start + j]) { ok = 0; break; }
+                    if (ok) {
+                        for (int j = 0; j < need; j++)
+                            sug[row][start + j] = 1;
+                        break;
+                    }
+                }
+            } else {
+                if (rand() % 2 == 0) {
+                    while (1) {
+                        int row   = rand() % 9;
+                        int start = rand() % 6;
+                        int ok = 1;
+                        for (int j = 0; j < 4; j++)
+                            if (seats[row][start + j]) { ok = 0; break; }
+                        if (ok) {
+                            for (int j = 0; j < 4; j++)
+                                sug[row][start + j] = 1;
+                            break;
+                        }
+                    }
+                } else {
+                    while (1) {
+                        int row   = rand() % 8;
+                        int start = rand() % 8;
+                        int ok = 1;
+                        for (int j = 0; j < 2; j++)
+                            if (seats[row  ][start + j] ||
+                                seats[row+1][start + j])
+                                { ok = 0; break; }
+                        if (ok) {
+                            for (int j = 0; j < 2; j++) {
+                                sug[row  ][start + j] = 1;
+                                sug[row+1][start + j] = 1;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            printf("\\123456789\n");
+            for (int r = 8; r >= 0; r--) {
+                printf("%d-", r + 1);
+                for (int c = 0; c < 9; c++) {
+                    if      (sug[r][c])      putchar('@');
+                    else if (seats[r][c])    putchar('*');
+                    else                     putchar('-');
+                }
+                putchar('\n');
+            }
+            char y;
+            while (1) {
+                printf("滿意嗎？(y/n)：");
+                scanf(" %c", &y);
+                if (y=='y' || y=='Y') {
+                    // 接受：把 @ 轉成 *
+                    for (int rr = 0; rr < 9; rr++)
+                        for (int cc = 0; cc < 9; cc++)
+                            if (sug[rr][cc]) seats[rr][cc] = 1;
+                    break;
+                }
+                if (y=='n' || y=='N') break;
+                printf("輸入錯誤，請輸入 y 或 n。\n");
+            }
+            printf("按任意鍵返回主選單...");
+            getchar(); getchar();
+        }
+        else if (in == 'c' || in == 'C') {;
+        }
+        else if (in == 'd' || in == 'D') {
+        }
+        else {
+            printf("選項錯誤，按任意鍵重試...");
+            getchar(); getchar();
         }
     }
-    system("pause");
+
     return 0;
 }
