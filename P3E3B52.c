@@ -67,6 +67,7 @@ int main(void) {
         scanf(" %c", &in);  // 前空格跳過殘留換行
 
         if (in == 'a' || in == 'A') {
+            //a選項
             printf("\\123456789\n");
             for (int row = 8; row >= 0; row--) {
                 printf("%d-", row + 1);
@@ -78,6 +79,7 @@ int main(void) {
             getchar(); getchar();
         }
         else if (in == 'b' || in == 'B') {
+            //b選項
             int need;
             while (1) {
                 printf("請輸入要預訂的座位數 (1~4)：");
@@ -165,6 +167,7 @@ int main(void) {
             getchar(); getchar();
         }
         else if (in == 'c' || in == 'C') {
+            //c選項
             int sug[9][9] = {0};
             while (1) {
                 int rs, cs;
@@ -203,6 +206,7 @@ int main(void) {
                     if (sug[r][c]) seats[r][c] = 1;
         }
     else if (in == 'd' || in == 'D') {
+        //d選項
         char y;
         while (1) {
             printf("Continue? (y/n): ");
@@ -227,3 +231,8 @@ int main(void) {
 
     return 0;
 }
+//本次作業是目前實作做大型的作業
+//使用到很多迴圈與判斷函式
+//寫起來困難度比前面兩次的作業還要增加不少
+//期間也上網查詢與問過很多次gpt，如何完成儲存上次狀態與避免覆蓋以預定的位置
+//雖然這種對初學者來說是大型專案，且很有挑戰性，希望下次不要失敗bug這麼多
