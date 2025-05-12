@@ -4,7 +4,6 @@
 #include <time.h>
 
 int main(void) {
-    // 1. 開場 ASCII Art + 密碼驗證
     printf(
         "                _______\n"
         "                |  |  |   \n"
@@ -54,7 +53,6 @@ int main(void) {
         }
     }
 
-    // 3. 主選單迴圈
     while (1) {
         system("cls");  
         printf("----------[Booking System]----------\n");
@@ -111,7 +109,7 @@ int main(void) {
                 if (rand() % 2 == 0) {
                     while (1) {
                         int row   = rand() % 9;
-                        int start = rand() % 6;  // 9-4+1
+                        int start = rand() % 6;  
                         int ok = 1;
                         for (int j = 0; j < 4; j++)
                             if (seats[row][start + j]) { ok = 0; break; }
@@ -124,7 +122,7 @@ int main(void) {
                 } else {
                     while (1) {
                         int row   = rand() % 8;
-                        int start = rand() % 8;  // 9-2+1
+                        int start = rand() % 8; 
                         int ok = 1;
                         for (int j = 0; j < 2; j++)
                             if (seats[row  ][start + j] ||
@@ -204,9 +202,23 @@ int main(void) {
                 for (int c = 0; c < 9; c++)
                     if (sug[r][c]) seats[r][c] = 1;
         }
-        else if (in == 'd' || in == 'D') {
-            break;
+    else if (in == 'd' || in == 'D') {
+        char y;
+        while (1) {
+            printf("Continue? (y/n): ");
+            scanf(" %c", &y);            
+            if (y == 'y' || y == 'Y') {
+                break;                    
+            } 
+            else if (y == 'n' || y == 'N') {
+                printf("感謝使用，再見！\n");
+                return 0;              
+            } 
+            else {
+                printf("輸入錯誤，請輸入 y 或 n。\n");
+            }
         }
+    }
         else {
             printf("選項錯誤，按任意鍵重試...");
             getchar(); getchar();
